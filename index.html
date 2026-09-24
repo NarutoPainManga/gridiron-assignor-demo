@@ -17,7 +17,8 @@
         <nav>
           <button class="nav-link active" data-view="dashboard"><span>▦</span> Assignment board</button>
           <button class="nav-link" data-view="openings"><span>⚑</span> Openings <em id="openingCount"></em></button>
-          <button class="nav-link" data-view="handoff"><span>⇄</span> Zebra handoff <em id="handoffCount"></em></button>
+          <button class="nav-link" data-view="handoff"><span>⇄</span> Assignment status <em id="handoffCount"></em></button>
+          <button class="nav-link" data-view="my-assignments"><span>✓</span> My assignments</button>
           <button class="nav-link" data-view="games"><span>◫</span> Games <em id="gameCount"></em></button>
           <button class="nav-link" data-view="officials"><span>♙</span> Officials <em id="officialCount"></em></button>
           <button class="nav-link" data-view="import"><span>↥</span> Import data</button>
@@ -26,7 +27,7 @@
       </aside>
 
       <main>
-        <header class="topbar"><div><p class="eyebrow">WEEK OF SEPTEMBER 14–20</p><h1 id="pageTitle">Assignment board</h1></div><div class="top-actions"><button class="secondary" id="previewModeBtn">Official portal preview</button><button class="primary" id="addGameBtn">+ Add game</button></div></header>
+        <header class="topbar"><div><p class="eyebrow">STANDALONE DEMO · UPCOMING GAMES</p><h1 id="pageTitle">Assignment board</h1></div><div class="top-actions"><select class="handoff-select" id="demoUserSelect"><option value="9001">Alex Morgan · Assignor</option><option value="1">Marcus Reynolds · Official</option><option value="8">Lena Ortiz · Auxiliary</option></select><button class="primary" id="addGameBtn">+ Add game</button></div></header>
         <section id="dashboard" class="view active">
           <div class="metrics" id="metrics"></div>
           <div class="section-heading"><div><h2>Needs your attention</h2><p>Open games, sorted by kickoff and staffing need.</p></div><select id="levelFilter"><option value="">All levels</option><option>Varsity</option><option>Sub-varsity</option><option>Youth</option><option>College</option></select></div>
@@ -44,8 +45,13 @@
         </section>
 
         <section id="handoff" class="view">
-          <div class="section-heading"><div><h2>ZebraWeb handoff</h2><p>Keep the assignment decision here, then record and confirm it in ZebraWeb.</p></div></div>
+          <div class="section-heading"><div><h2>Assignment status</h2><p>Track internal assignment responses and reopen returned positions.</p></div></div>
           <div class="table-wrap"><table><thead><tr><th>Game</th><th>Position</th><th>Selected person</th><th>Current step</th><th></th></tr></thead><tbody id="handoffTable"></tbody></table></div>
+        </section>
+
+        <section id="my-assignments" class="view">
+          <div class="section-heading"><div><h2>My assignments</h2><p>Accept or return your own pending assignments. Assignors manage the schedule from the console.</p></div><button class="secondary" id="availabilityBtn">Set availability</button></div>
+          <div class="game-cards" id="myAssignmentsList"></div>
         </section>
 
         <section id="officials" class="view">
@@ -58,8 +64,8 @@
           <div class="import-grid">
             <article class="import-card"><span class="import-icon">◫</span><h3>Games CSV</h3><p>Required columns: <code>date, time, home_team, away_team, venue, zip, region, level, crew_size, auxiliary</code>. Auxiliary is 0, 4, or 5.</p><label class="file-button">Choose games CSV<input type="file" id="gamesFile" accept=".csv,text/csv" /></label><button class="text-button" data-template="games">Download template</button></article>
             <article class="import-card"><span class="import-icon">♙</span><h3>Officials CSV</h3><p>Required columns: <code>name, zip, years, type</code>. Type is <code>official</code> or <code>auxiliary</code>.</p><label class="file-button">Choose officials CSV<input type="file" id="officialsFile" accept=".csv,text/csv" /></label><button class="text-button" data-template="officials">Download template</button></article>
-            <article class="import-card"><span class="import-icon">♜</span><h3>ZebraWeb crew export</h3><p>Import ZebraWeb’s <code>Crews.xls</code> export. It keeps crew names and their seven official positions together.</p><label class="file-button">Choose Crews.xls<input type="file" id="crewsFile" accept=".xls,.html,text/html" /></label></article>
-            <article class="import-card"><span class="import-icon">◷</span><h3>ZebraWeb availability report</h3><p>Import the available-officials report for one date. It enriches qualifications and removes unavailable officials from recommendations.</p><label class="field">REPORT DATE<input type="date" id="availabilityDate" value="2026-09-30" /></label><label class="file-button">Choose availability report<input type="file" id="availabilityFile" accept=".xls,.html,text/html" /></label></article>
+            <article class="import-card"><span class="import-icon">♜</span><h3>Crews CSV</h3><p>Coming next: import established crews and their role maps. The demo already includes crew-aware assignment logic.</p></article>
+            <article class="import-card"><span class="import-icon">◷</span><h3>Availability</h3><p>Officials update availability in their portal. This standalone demo keeps availability blocks local to the selected demo user.</p></article>
           </div>
           <div class="callout"><strong>How distance works</strong><p>For this MVP, the app estimates miles between Texas ZIP codes. Replace it later with a driving-distance map service when the workflow is proven.</p></div>
         </section>
