@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gridiron Assignor</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar">
+        <a class="brand" href="#"><span class="brand-mark">G</span><span>GRIDIRON<br /><b>ASSIGNOR</b></span></a>
+        <p class="district-label">TEXAS · ALL REGIONS</p>
+        <nav>
+          <button class="nav-link active" data-view="dashboard"><span>▦</span> Assignment board</button>
+          <button class="nav-link" data-view="openings"><span>⚑</span> Openings <em id="openingCount"></em></button>
+          <button class="nav-link" data-view="handoff"><span>⇄</span> Zebra handoff <em id="handoffCount"></em></button>
+          <button class="nav-link" data-view="games"><span>◫</span> Games <em id="gameCount"></em></button>
+          <button class="nav-link" data-view="officials"><span>♙</span> Officials <em id="officialCount"></em></button>
+          <button class="nav-link" data-view="import"><span>↥</span> Import data</button>
+        </nav>
+        <div class="sidebar-note"><span class="live-dot"></span> Local workspace<br /><small>Data stays in this browser</small></div>
+      </aside>
+
+      <main>
+        <header class="topbar"><div><p class="eyebrow">WEEK OF SEPTEMBER 14–20</p><h1 id="pageTitle">Assignment board</h1></div><div class="top-actions"><button class="secondary" id="previewModeBtn">Official portal preview</button><button class="primary" id="addGameBtn">+ Add game</button></div></header>
+        <section id="dashboard" class="view active">
+          <div class="metrics" id="metrics"></div>
+          <div class="section-heading"><div><h2>Needs your attention</h2><p>Open games, sorted by kickoff and staffing need.</p></div><select id="levelFilter"><option value="">All levels</option><option>Varsity</option><option>Sub-varsity</option><option>Youth</option><option>College</option></select></div>
+          <div class="game-cards" id="attentionGames"></div>
+        </section>
+
+        <section id="games" class="view">
+          <div class="section-heading"><div><h2>All games</h2><p>Create the crew you need, then fill each position.</p></div><button class="secondary" id="exportGamesBtn">Export CSV</button></div>
+          <div class="table-wrap"><table><thead><tr><th>Game</th><th>Kickoff</th><th>Location</th><th>Crew</th><th>Status</th><th></th></tr></thead><tbody id="gamesTable"></tbody></table></div>
+        </section>
+
+        <section id="openings" class="view">
+          <div class="section-heading"><div><h2 id="openingsHeading">Open positions</h2><p id="openingsDescription">Officials may express interest. Only an assignor can make an assignment.</p></div><span class="mode-indicator" id="modeIndicator">Assignor view</span></div>
+          <div class="game-cards" id="openingsList"></div>
+        </section>
+
+        <section id="handoff" class="view">
+          <div class="section-heading"><div><h2>ZebraWeb handoff</h2><p>Keep the assignment decision here, then record and confirm it in ZebraWeb.</p></div></div>
+          <div class="table-wrap"><table><thead><tr><th>Game</th><th>Position</th><th>Selected person</th><th>Current step</th><th></th></tr></thead><tbody id="handoffTable"></tbody></table></div>
+        </section>
+
+        <section id="officials" class="view">
+          <div class="section-heading"><div><h2>Officials & auxiliary</h2><p>Distance is estimated from ZIP codes.</p></div><button class="primary" id="addOfficialBtn">+ Add person</button></div>
+          <div class="official-grid" id="officialsGrid"></div>
+        </section>
+
+        <section id="import" class="view">
+          <div class="section-heading"><div><h2>Import data</h2><p>Start with your existing roster and game schedule.</p></div></div>
+          <div class="import-grid">
+            <article class="import-card"><span class="import-icon">◫</span><h3>Games CSV</h3><p>Required columns: <code>date, time, home_team, away_team, venue, zip, region, level, crew_size, auxiliary</code>. Auxiliary is 0, 4, or 5.</p><label class="file-button">Choose games CSV<input type="file" id="gamesFile" accept=".csv,text/csv" /></label><button class="text-button" data-template="games">Download template</button></article>
+            <article class="import-card"><span class="import-icon">♙</span><h3>Officials CSV</h3><p>Required columns: <code>name, zip, years, type</code>. Type is <code>official</code> or <code>auxiliary</code>.</p><label class="file-button">Choose officials CSV<input type="file" id="officialsFile" accept=".csv,text/csv" /></label><button class="text-button" data-template="officials">Download template</button></article>
+            <article class="import-card"><span class="import-icon">♜</span><h3>ZebraWeb crew export</h3><p>Import ZebraWeb’s <code>Crews.xls</code> export. It keeps crew names and their seven official positions together.</p><label class="file-button">Choose Crews.xls<input type="file" id="crewsFile" accept=".xls,.html,text/html" /></label></article>
+            <article class="import-card"><span class="import-icon">◷</span><h3>ZebraWeb availability report</h3><p>Import the available-officials report for one date. It enriches qualifications and removes unavailable officials from recommendations.</p><label class="field">REPORT DATE<input type="date" id="availabilityDate" value="2026-09-30" /></label><label class="file-button">Choose availability report<input type="file" id="availabilityFile" accept=".xls,.html,text/html" /></label></article>
+          </div>
+          <div class="callout"><strong>How distance works</strong><p>For this MVP, the app estimates miles between Texas ZIP codes. Replace it later with a driving-distance map service when the workflow is proven.</p></div>
+        </section>
+      </main>
+    </div>
+
+    <dialog id="modal"><form method="dialog" id="modalForm"><button class="close" type="button" onclick="closeModal()">×</button><div id="modalContent"></div></form></dialog>
+    <div id="toast" role="status"></div>
+    <script src="app.js"></script>
+  </body>
+</html>
